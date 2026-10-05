@@ -1,0 +1,56 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: comment-service
+  datasource:
+    url: ${COMMENT_DB_URL:${INKWELL_DB_URL:jdbc:mysql://localhost:3306/inkwell_platform?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}}
+    username: ${COMMENT_DB_USERNAME:${INKWELL_DB_USERNAME:root}}
+    password: ${COMMENT_DB_PASSWORD:${INKWELL_DB_PASSWORD:admin}}
+    driver-class-name: ${COMMENT_DB_DRIVER:${INKWELL_DB_DRIVER:com.mysql.cj.jdbc.Driver}}
+  jpa:
+    database-platform: ${COMMENT_JPA_DIALECT:${INKWELL_JPA_DIALECT:org.hibernate.dialect.MySQLDialect}}
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
+
+inkwell:
+  post-service-url: ${INKWELL_POST_SERVICE_URL:http://localhost:8082}
+  notification:
+    kafka:
+      topic: ${INKWELL_NOTIFICATION_KAFKA_TOPIC:notification.dispatch.v1}
+  internal-api-key: ${INKWELL_INTERNAL_API_KEY:ghfyfr7t8hgv7yh}
+  comment:
+    moderation-required: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  config: "${INKWELL_LOG_CONFIG:file:D:/Inkwell/common-logback-spring.xml}"
+  file:
+    name: ${INKWELL_LOG_DIR:log}/comment-service.app.log
+  level:
+    com.app.commentservice: INFO

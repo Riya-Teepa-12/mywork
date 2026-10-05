@@ -1,0 +1,24 @@
+sequenceDiagram
+    participant A as Author
+    participant FE as Frontend
+    participant GW as API Gateway
+    participant POST as Post Service
+    participant COMM as Comment Service
+    participant NEWS as Newsletter Service
+    participant K as Kafka
+    participant NOTIF as Notification Service
+
+    A->>FE: Publish post
+    FE->>GW: PUT /posts/{id}/publish
+    GW->>POST: Publish request
+    POST-->>K: Publish dispatch event
+    POST-->>NEWS: Trigger post notification
+    NEWS-->>K: Publish newsletter event
+    POST-->>GW: Post published
+    GW-->>FE: 200 OK
+
+    FE->>GW: POST /comments
+    GW->>COMM: Add comment
+    COMM-->>K: Publish comment event
+    NOTIF-->>K: Consume and persist/send
+    GW-->>FE: Comment created

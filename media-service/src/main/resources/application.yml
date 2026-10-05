@@ -1,0 +1,55 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: media-service
+  datasource:
+    url: ${MEDIA_DB_URL:${INKWELL_DB_URL:jdbc:mysql://localhost:3306/inkwell_platform?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}}
+    username: ${MEDIA_DB_USERNAME:${INKWELL_DB_USERNAME:root}}
+    password: ${MEDIA_DB_PASSWORD:${INKWELL_DB_PASSWORD:admin}}
+    driver-class-name: ${MEDIA_DB_DRIVER:${INKWELL_DB_DRIVER:com.mysql.cj.jdbc.Driver}}
+  jpa:
+    database-platform: ${MEDIA_JPA_DIALECT:${INKWELL_JPA_DIALECT:org.hibernate.dialect.MySQLDialect}}
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
+
+inkwell:
+  media:
+    storage: ${INKWELL_MEDIA_STORAGE:s3}
+    base-url: ""
+    s3:
+      bucket: ${INKWELL_S3_BUCKET:inkwellmedia}
+      region: ${INKWELL_S3_REGION:ap-south-1}
+      endpoint: ${INKWELL_S3_ENDPOINT:}
+      public-base-url: ${INKWELL_S3_PUBLIC_BASE_URL:}
+      prefix: ${INKWELL_S3_PREFIX:media}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  config: "${INKWELL_LOG_CONFIG:file:D:/Inkwell/common-logback-spring.xml}"
+  file:
+    name: ${INKWELL_LOG_DIR:log}/media-service.app.log
+  level:
+    com.app.mediaservice: INFO

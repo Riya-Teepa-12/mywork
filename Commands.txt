@@ -1,0 +1,82 @@
+Swagger
+========
+http://localhost:8080/swagger-ui.html (for all services)
+
+http://localhost:8081/swagger-ui/index.html (For each service change port only)
+
+Sonarqube
+==========
+
+docker run -d -p 9000:9000 sonarqube (Run)
+
+mvn clean verify sonar:sonar "-Dsonar.host.url=http://localhost:9000" "-Dsonar.token=<token>" (Run from root directory)
+
+Kafka + ZooKeeper
+=================
+
+docker compose -f docker-compose.kafka.yml up -d
+
+docker compose -f docker-compose.kafka.yml down
+
+# Kafka consumer side-effects toggle
+# INKWELL_NOTIFICATION_KAFKA_APPLY_SIDE_EFFECTS=true
+
+Consume topic command
+============================
+docker exec -it kafka /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic notification.dispatch.v1 --from-beginning
+
+
+mvn clean verify
+mvn sonar:sonar `
+  "-Dsonar.host.url=http://localhost:9000" `
+  "-Dsonar.projectKey=inkwell-backend" `
+  "-Dsonar.projectName=Inkwell Backend" `
+  "-Dsonar.token=squ_4517630791c3ee3cbc021a08e0b6b4634bc558d5" `
+  "-Dsonar.qualitygate.wait=true" `
+  "-Dsonar.coverage.jacoco.xmlReportPaths=**/target/site/jacoco/jacoco.xml" `
+  "-Dsonar.coverage.exclusions=**/dto/**,**/entity/**"
+
+  squ_4517630791c3ee3cbc021a08e0b6b4634bc558d5
+
+Run below commnad inside frontend folder
+npm test -- --coverage --watchAll=false --runInBand // for code coverage
+
+npx sonar-scanner `
+"-Dsonar.host.url=http://localhost:9000" `
+"-Dsonar.projectKey=inkwell-frontend" `
+"-Dsonar.projectName=Inkwell Frontend" `
+"-Dsonar.token=squ_4517630791c3ee3cbc021a08e0b6b4634bc558d5" `
+"-Dsonar.projectBaseDir=." `
+"-Dsonar.sources=src/App.jsx,src/components,src/context,src/lib" `
+"-Dsonar.tests=src" `
+"-Dsonar.test.inclusions=src/**/*.test.js,src/**/*.test.jsx,src/**/*.spec.js,src/**/*.spec.jsx" `
+"-Dsonar.javascript.lcov.reportPaths=coverage/lcov.info" `
+"-Dsonar.exclusions=**/node_modules/**,**/dist/**,**/coverage/**,**/src/components/RichTextEditor.jsx"
+
+
+dekho fark bhi nhi hai galti mehsus bhi nhi ho rahi dekh tak nhi paayi bataya bhi tha ki token paste karna hai
+usme itna bada bada lika bhi tha YOUR_NEW_TOKEN phir bhi nhi dekh paayi bolo ab kuch
+sorry kya sorry dikh nhi raha tha kya yaar galti hi hoti hai unke saamnephir or waha nhi chalta dimmag ham command sahi na karte to
+tum to wahi chala deti or phir pata nhi chalta kya galat kiya
+hatao yaar tumse bolna hi bekar hai tum nhi sudhrogi hata do access or haa test kar lena poora project kyoki hamne bhut time
+se nhi chalaya
+
+ab dekho yahi galti jab kari thi purane port pe phale se chal raha hai tumne new port pe chala diya to cors error to aaigi hi backend se
+yaar kese kese kar leti ho yaar tum batao to hame thoda
+samajh me aata hai ki kya karna hai
+tum to wahi chala deti or phir pata nhi chalta kya galat kiya
+hatao yaar tumse bolna hi bekar hai tum nhi sudhrogi hata do access or haa test kar lena poora project kyoki hamne bhut time
+se nhi chalaya
+kya hai chla ke dekhe ki nahi ye kill kr diya h ab purana hi chal raha hai
+nhi tum batao hame kese kar leti ho yeh matlab thoda to dimaag sabkoi istmaal kartahai
+tum bhi kar lo rust/jang lag rahi usme bolo bolo aaj baat karo phir chala lena
+hame nhi matlab tumhe bura kyo na lag jaaye hame nhi chahiye ki tum unke saamne yeh galti kar ke aao
+bolo ab  sudhar to diya yrr ab kyu kr rahe ho aur vaise bhi glti to sabse hoti hai susharte aana chahiye
+arre to hamne bataya abhi to tumne band kiya nhi to tum to dhundti rahit kya ho rah kya nhi
+nahi hum check kr lete ye
+haa chalo yeh dekh lieti par wo command ka kya hai kyo nhi dikah tha
+error chasma nhi tha ki dimaag nhi tha saath batao dono ni tha
+nhi
+chasme mai ke bina dikha nahi aur dimag tha ni to chala ni
+suno bakwaas mat karo ham bhut maarige tumhe gaadi kahi ki batate bhi ja rahe the ki token rakhna hia us command me or
+haa free time hot to us command ko bhi padh lena

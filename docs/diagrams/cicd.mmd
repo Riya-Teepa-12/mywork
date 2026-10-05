@@ -1,0 +1,10 @@
+flowchart LR
+    A[Git Push/PR] --> B[CI Trigger]
+    B --> C[Maven Test]
+    C --> D[JaCoCo + Verify]
+    D --> E[SonarQube Quality Gate]
+    E --> F[Docker Build per Service]
+    F --> G[Registry Push]
+    G --> H[Deploy Dev]
+    H --> I[Deploy Stage]
+    I --> J[Deploy Prod]

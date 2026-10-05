@@ -1,0 +1,35 @@
+flowchart LR
+    FE[Frontend React/Vite] -->|HTTPS REST| GW[API Gateway 8080]
+    GW -->|Service Discovery| REG[Eureka Registry 8761]
+
+    GW --> AUTH[Auth Service 8081]
+    GW --> POST[Post Service 8082]
+    GW --> COMM[Comment Service 8083]
+    GW --> CAT[Category Service 8084]
+    GW --> MEDIA[Media Service 8085]
+    GW --> NEWS[Newsletter Service 8086]
+    GW --> NOTIF[Notification Service 8087]
+
+    AUTH --> MYSQL[(MySQL)]
+    POST --> MYSQL
+    COMM --> MYSQL
+    CAT --> MYSQL
+    MEDIA --> MYSQL
+    NEWS --> MYSQL
+    NOTIF --> MYSQL
+
+    POST --> REDIS[(Redis)]
+    NOTIF --> REDIS
+    AUTH --> REDIS
+
+    AUTH --> KAFKA[(Kafka)]
+    POST --> KAFKA
+    COMM --> KAFKA
+    NEWS --> KAFKA
+    NOTIF --> KAFKA
+
+    AUTH --> SMTP[(SMTP)]
+    NEWS --> SMTP
+    NOTIF --> SMTP
+
+    MEDIA --> S3[(S3 Compatible Storage)]

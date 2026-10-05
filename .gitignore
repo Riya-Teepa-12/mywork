@@ -1,0 +1,39 @@
+# Environment files with secrets
+.env
+.env.*
+!.env.example
+backend.env
+
+# Target & Build files
+target/
+**/target/
+build/
+**/build/
+dist/
+**/dist/
+node_modules/
+**/node_modules/
+
+# Database files
+*.db
+*.mv.db
+*.lock.db
+
+# Logs
+logs/
+**/logs/
+*.log
+log/
+**/log/
+
+# IDE & Tooling
+.idea/
+.vscode/
+*.iml
+.metadata/
+.scannerwork/
+_tmp_docx_extract/
+
+# OS files
+.DS_Store
+Thumbs.db

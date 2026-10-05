@@ -1,0 +1,64 @@
+erDiagram
+    USER ||--o{ POST : authors
+    USER ||--o{ COMMENT : writes
+    USER ||--o{ POST_LIKE : reacts
+    USER ||--o{ COMMENT_LIKE : reacts
+    USER ||--o{ AUTHOR_FOLLOW : follows
+    USER ||--o{ USER_SUBSCRIPTION : owns
+    USER ||--o{ PAYMENT_ORDER : creates
+    USER ||--o{ AUDIT_LOG : acts
+    USER ||--o{ AUTHOR_UPGRADE_REQUEST : submits
+    USER ||--o{ NOTIFICATION : receives
+    USER ||--o{ SUBSCRIBER : has
+
+    POST ||--o{ COMMENT : contains
+    POST ||--o{ POST_LIKE : has
+    POST ||--o{ POST_CATEGORY : mapped
+    POST ||--o{ POST_TAG : mapped
+    POST ||--o{ MEDIA : links
+
+    COMMENT ||--o{ COMMENT_LIKE : has
+    CATEGORY ||--o{ POST_CATEGORY : classifies
+    TAG ||--o{ POST_TAG : labels
+
+    USER {
+      BIGINT id PK
+      STRING email
+      STRING username
+      STRING role
+      BOOLEAN active
+    }
+    POST {
+      BIGINT id PK
+      BIGINT author_id
+      STRING title
+      STRING slug
+      STRING status
+      BOOLEAN featured
+    }
+    COMMENT {
+      BIGINT id PK
+      BIGINT post_id
+      BIGINT author_id
+      STRING status
+      BIGINT parent_comment_id
+    }
+    MEDIA {
+      BIGINT id PK
+      BIGINT uploader_id
+      BIGINT linked_post_id
+      STRING storage_key
+    }
+    NOTIFICATION {
+      BIGINT id PK
+      BIGINT recipient_id
+      BIGINT actor_id
+      STRING type
+      BOOLEAN read
+    }
+    SUBSCRIBER {
+      BIGINT id PK
+      STRING email
+      STRING status
+      BOOLEAN post_alerts
+    }

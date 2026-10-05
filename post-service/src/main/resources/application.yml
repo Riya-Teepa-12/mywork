@@ -1,0 +1,65 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: post-service
+  datasource:
+    url: ${POST_DB_URL:${INKWELL_DB_URL:jdbc:mysql://localhost:3306/inkwell_platform?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}}
+    username: ${POST_DB_USERNAME:${INKWELL_DB_USERNAME:root}}
+    password: ${POST_DB_PASSWORD:${INKWELL_DB_PASSWORD:admin}}
+    driver-class-name: ${POST_DB_DRIVER:${INKWELL_DB_DRIVER:com.mysql.cj.jdbc.Driver}}
+  jpa:
+    database-platform: ${POST_JPA_DIALECT:${INKWELL_JPA_DIALECT:org.hibernate.dialect.MySQLDialect}}
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
+
+inkwell:
+  newsletter-service-url: ${INKWELL_NEWSLETTER_SERVICE_URL:http://localhost:8086}
+  notification:
+    kafka:
+      topic: ${INKWELL_NOTIFICATION_KAFKA_TOPIC:notification.dispatch.v1}
+  comment-service-url: ${INKWELL_COMMENT_SERVICE_URL:http://localhost:8083}
+  auth-service-url: ${INKWELL_AUTH_SERVICE_URL:http://localhost:8081}
+  frontend-url: ${INKWELL_FRONTEND_URL:http://localhost:5173}
+  internal-api-key: ${INKWELL_INTERNAL_API_KEY:${AUTH_INTERNAL_API_KEY:ghfyfr7t8hgv7yh}}
+  free-author-post-limit: ${INKWELL_FREE_AUTHOR_POST_LIMIT:5}
+  views:
+    redis-prefix: ${INKWELL_POST_VIEW_REDIS_PREFIX:post:views:session}
+    session-ttl-hours: ${INKWELL_POST_VIEW_SESSION_TTL_HOURS:24}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  config: "${INKWELL_LOG_CONFIG:file:D:/Inkwell/common-logback-spring.xml}"
+  file:
+    name: ${INKWELL_LOG_DIR:log}/post-service.app.log
+  level:
+    com.app.postservice: INFO

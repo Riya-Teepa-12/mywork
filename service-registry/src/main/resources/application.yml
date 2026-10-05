@@ -1,0 +1,24 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: SERVICE-REGISTRY
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  config: "${INKWELL_LOG_CONFIG:file:D:/Inkwell/common-logback-spring.xml}"
+  file:
+    name: ${INKWELL_LOG_DIR:log}/service-registry.app.log
+  level:
+    com.app.serviceregistry: INFO

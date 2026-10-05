@@ -1,0 +1,12 @@
+sequenceDiagram
+    participant U as User
+    participant FE as Frontend
+    participant GW as API Gateway
+    participant AUTH as Auth Service
+
+    U->>FE: Enter email/password
+    FE->>GW: POST /auth/login
+    GW->>AUTH: Forward login request
+    AUTH-->>GW: JWT + user payload
+    GW-->>FE: Auth response
+    FE-->>U: Session established

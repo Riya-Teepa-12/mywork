@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inkwell Frontend File-by-File Document</title>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --paper: #ffffff;
+      --text: #1f2937;
+      --muted: #4b5563;
+      --primary: #0f766e;
+      --primary-2: #2563eb;
+      --border: #dbe3ee;
+      --code-bg: #0b1020;
+      --code-text: #e5e7eb;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.65;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .page {
+      max-width: 980px;
+      margin: 32px auto;
+      padding: 0 20px 48px;
+    }
+
+    .paper {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+
+    header {
+      padding: 40px 40px 24px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(15,118,110,0.08), rgba(37,99,235,0.08));
+    }
+
+    h1, h2, h3, h4 {
+      line-height: 1.2;
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 2.15rem;
+      margin-bottom: 10px;
+      color: #0f172a;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      max-width: 900px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15,118,110,0.09);
+      color: #0f766e;
+      border: 1px solid rgba(15,118,110,0.15);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .content {
+      padding: 32px 40px 44px;
+    }
+
+    section {
+      margin-bottom: 32px;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+      color: #0f172a;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(15,118,110,0.18);
+    }
+
+    h3 {
+      margin-top: 22px;
+      margin-bottom: 10px;
+      font-size: 1.12rem;
+      color: #0f172a;
+    }
+
+    p {
+      margin: 0 0 14px;
+      color: var(--text);
+    }
+
+    ul, ol {
+      margin: 0 0 14px 22px;
+      padding: 0;
+    }
+
+    li { margin: 5px 0; }
+
+    .note {
+      background: #f8fafc;
+      border-left: 4px solid var(--primary-2);
+      padding: 14px 16px;
+      border-radius: 10px;
+      color: var(--muted);
+      margin: 14px 0 18px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .card h4 {
+      margin-bottom: 8px;
+      font-size: 1rem;
+      color: #111827;
+    }
+
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 18px 20px;
+      border-radius: 14px;
+      overflow-x: auto;
+      margin: 14px 0 18px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    code {
+      background: rgba(15, 23, 42, 0.06);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    .toc {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+    }
+
+    .toc a {
+      color: var(--primary-2);
+      text-decoration: none;
+    }
+
+    .toc a:hover {
+      text-decoration: underline;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .chip {
+      display: inline-block;
+      font-size: 0.84rem;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: rgba(37,99,235,0.1);
+      color: #2563eb;
+      border: 1px solid rgba(37,99,235,0.14);
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+
+    .footer-note {
+      margin-top: 20px;
+      font-size: 0.94rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+
+    .print-btn {
+      display: inline-block;
+      margin-top: 18px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .print-btn:hover {
+      filter: brightness(0.95);
+    }
+
+    @media print {
+      body { background: #fff; }
+      .page { margin: 0; padding: 0; max-width: none; }
+      .paper { box-shadow: none; border: none; border-radius: 0; }
+      .print-btn, .toc { display: none !important; }
+      header { padding: 24px 28px 18px; }
+      .content { padding: 24px 28px 28px; }
+      section { break-inside: avoid; page-break-inside: avoid; }
+      a { color: inherit; text-decoration: none; }
+    }
+
+    @media (max-width: 760px) {
+      .grid, .two-col { grid-template-columns: 1fr; }
+      header, .content { padding-left: 20px; padding-right: 20px; }
+      h1 { font-size: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="paper">
+      <header>
+        <h1>Inkwell Frontend File-by-File Document</h1>
+        <p class="subtitle">
+          A clean, printable guide to understand the Inkwell React frontend from zero — architecture, file-by-file responsibilities,
+          core concepts, page flows, and a short presentation script.
+        </p>
+        <div class="meta">
+          <span class="badge">React Frontend</span>
+          <span class="badge">File-by-file Study Guide</span>
+          <span class="badge">PDF-ready HTML</span>
+        </div>
+        <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+      </header>
+
+      <div class="content">
+        <div class="toc">
+          <h3>Contents</h3>
+          <ol>
+            <li><a href="#overview">What the frontend does</a></li>
+            <li><a href="#architecture">Main frontend architecture</a></li>
+            <li><a href="#concepts">React concepts used</a></li>
+            <li><a href="#files">File-by-file overview</a></li>
+            <li><a href="#app">`App.jsx` explanation</a></li>
+            <li><a href="#authcontext">`AuthContext.jsx` explanation</a></li>
+            <li><a href="#login">`LoginPage.jsx` explanation</a></li>
+            <li><a href="#admin">`AdminPanelPage.jsx` explanation</a></li>
+            <li><a href="#summary">Summary table</a></li>
+            <li><a href="#script">2-minute frontend presentation script</a></li>
+            <li><a href="#study">What to study first</a></li>
+          </ol>
+        </div>
+
+        <section id="overview">
+          <h2>1) What the frontend does in Inkwell</h2>
+          <p>
+            The frontend is the part the user sees in the browser. In Inkwell it is built with React and it handles page rendering,
+            form input, API calls, notifications, route protection, dashboard workflows, and UI updates.
+          </p>
+          <p>
+            The frontend talks to the backend through the API Gateway and updates the screen automatically when state changes.
+          </p>
+          <div class="note">
+            <strong>Main idea:</strong> user action → React state change → API call → backend response → UI update.
+          </div>
+        </section>
+
+        <section id="architecture">
+          <h2>2) Main frontend architecture</h2>
+          <div class="grid">
+            <div class="card">
+              <h4>App-level routing</h4>
+              <p><code>src/App.jsx</code> decides which page opens for each URL, which routes are public, and which routes are protected.</p>
+            </div>
+            <div class="card">
+              <h4>Global auth state</h4>
+              <p><code>src/context/AuthContext.jsx</code> stores token, user, role, login/logout methods, and session persistence.</p>
+            </div>
+            <div class="card">
+              <h4>Notification context</h4>
+              <p><code>src/context/NotificationContext.jsx</code> shows toast messages and global UI notifications.</p>
+            </div>
+            <div class="card">
+              <h4>API layer</h4>
+              <p><code>src/lib/api.js</code> wraps <code>fetch()</code>, adds JWT, parses JSON, and centralizes error handling.</p>
+            </div>
+            <div class="card">
+              <h4>Service layer</h4>
+              <p><code>src/lib/services.js</code> organizes API calls by domain: auth, posts, comments, media, taxonomy, newsletter, notifications.</p>
+            </div>
+            <div class="card">
+              <h4>Feature pages</h4>
+              <p>Pages like login, author dashboard, and admin panel implement the actual business workflows.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="concepts">
+          <h2>3) React concepts used in Inkwell frontend</h2>
+          <div>
+            <span class="chip">useState</span>
+            <span class="chip">useEffect</span>
+            <span class="chip">useContext</span>
+            <span class="chip">useNavigate</span>
+            <span class="chip">useLocation</span>
+            <span class="chip">useSearchParams</span>
+            <span class="chip">useMemo</span>
+            <span class="chip">useRef</span>
+            <span class="chip">Conditional Rendering</span>
+            <span class="chip">Controlled Components</span>
+            <span class="chip">Protected Routes</span>
+            <span class="chip">Page Animations</span>
+          </div>
+          <ul>
+            <li><strong><code>useState</code></strong> stores local values like form input, loading flags, error messages, and selected items.</li>
+            <li><strong><code>useEffect</code></strong> runs side effects like API calls and localStorage sync.</li>
+            <li><strong><code>useContext</code></strong> reads shared auth and notification data without prop drilling.</li>
+            <li><strong><code>useNavigate</code></strong> moves the user to another page after login/logout or access checks.</li>
+            <li><strong><code>useMemo</code></strong> optimizes derived calculations like counts and maps.</li>
+            <li><strong><code>useRef</code></strong> stores DOM/editor references for scroll and editor actions.</li>
+          </ul>
+        </section>
+
+        <section id="files">
+          <h2>4) File-by-file overview</h2>
+          <div class="two-col">
+            <div class="card"><h4><code>App.jsx</code></h4><p>Root router. Controls routes, protected pages, navbar/footer visibility, and suspended-user blocking.</p></div>
+            <div class="card"><h4><code>AuthContext.jsx</code></h4><p>Global auth manager. Stores token/user and handles login, logout, profile refresh, and localStorage sync.</p></div>
+            <div class="card"><h4><code>NotificationContext.jsx</code></h4><p>Global toast/notification system.</p></div>
+            <div class="card"><h4><code>api.js</code></h4><p>Shared API wrapper around fetch with JWT, parsing, loaders, and error handling.</p></div>
+            <div class="card"><h4><code>services.js</code></h4><p>Domain-wise API methods such as authService, postService, commentService, taxonomyService, mediaService, newsletterService, notificationService.</p></div>
+            <div class="card"><h4><code>LoginPage.jsx</code></h4><p>Login form, OAuth redirects, and login navigation.</p></div>
+            <div class="card"><h4><code>AuthorDashboardPage.jsx</code></h4><p>Author content creation, media upload, and comment moderation dashboard.</p></div>
+            <div class="card"><h4><code>AdminPanelPage.jsx</code></h4><p>Full admin control panel for users, posts, comments, taxonomy, newsletters, media, subscriptions, audit logs, and author requests.</p></div>
+            <div class="card"><h4><code>ProtectedRoute.jsx</code></h4><p>Route guard for login-required and role-based pages.</p></div>
+            <div class="card"><h4><code>Navbar.jsx</code></h4><p>Top navigation bar with role-based links.</p></div>
+            <div class="card"><h4><code>Footer.jsx</code></h4><p>Bottom footer layout component.</p></div>
+            <div class="card"><h4><code>RichTextEditor.jsx</code></h4><p>Editor for writing and formatting posts.</p></div>
+          </div>
+        </section>
+
+        <section id="app">
+          <h2>5) `App.jsx` — main router</h2>
+          <p>
+            `App.jsx` is the root frontend component. It decides which page should open for which URL, protects private routes, and controls
+            page transitions using Framer Motion.
+          </p>
+          <h3>Main ideas used here</h3>
+          <ul>
+            <li><strong><code>useLocation()</code></strong> reads the current route path.</li>
+            <li><strong><code>Routes</code> and <code>Route</code></strong> define the page mapping.</li>
+            <li><strong><code>ProtectedRoute</code></strong> blocks unauthorized access.</li>
+            <li><strong><code>PublicOnlyRoute</code></strong> blocks login/signup pages for logged-in users.</li>
+            <li><strong><code>AnimatePresence</code> and <code>motion.div</code></strong> animate page transitions.</li>
+          </ul>
+          <h3>Important route groups</h3>
+          <ul>
+            <li><strong>Public:</strong> home, feed, post details, author profile, suspended page</li>
+            <li><strong>Public-only:</strong> login, signup, forgot password, OAuth callback</li>
+            <li><strong>Protected:</strong> profile, notifications, newsletter, subscriptions</li>
+            <li><strong>Author/Admin:</strong> author dashboard</li>
+            <li><strong>Admin-only:</strong> admin panel</li>
+          </ul>
+          <div class="note">
+            If a user is authenticated and suspended, `App.jsx` directly shows the suspended account page.
+          </div>
+        </section>
+
+        <section id="authcontext">
+          <h2>6) `AuthContext.jsx` — global auth manager</h2>
+          <p>
+            `AuthContext.jsx` is the heart of frontend authentication. It stores the JWT token, user, role, login state, and suspended state,
+            and exposes actions like login, logout, signup, loginWithToken, and refreshProfile.
+          </p>
+          <h3>What it does</h3>
+          <ul>
+            <li>reads auth from localStorage</li>
+            <li>syncs auth changes back to localStorage</li>
+            <li>refreshes profile when token changes</li>
+            <li>auto-logs out if profile fetch fails</li>
+            <li>detects suspended accounts</li>
+          </ul>
+          <h3>Main hooks used</h3>
+          <ul>
+            <li><strong><code>createContext</code></strong> creates shared auth context.</li>
+            <li><strong><code>useContext</code></strong> lets components read auth data.</li>
+            <li><strong><code>useState</code></strong> stores token and user.</li>
+            <li><strong><code>useEffect</code></strong> syncs localStorage and refreshes profile.</li>
+            <li><strong><code>startTransition</code></strong> updates auth state smoothly.</li>
+          </ul>
+          <h3>Auth actions</h3>
+          <ul>
+            <li><strong>login()</strong> → calls `/auth/login` and stores token/user</li>
+            <li><strong>signup()</strong> → calls `/auth/register`</li>
+            <li><strong>loginWithToken()</strong> → used after OAuth/token-based login</li>
+            <li><strong>logout()</strong> → calls backend logout and clears local auth</li>
+            <li><strong>refreshProfile()</strong> → reloads profile from backend</li>
+          </ul>
+          <h3>Why this file matters</h3>
+          <p>
+            It avoids repeating auth logic in every page. Any component can simply call `useAuth()` to get login state and auth actions.
+          </p>
+        </section>
+
+        <section id="login">
+          <h2>7) `LoginPage.jsx` — login screen</h2>
+          <p>
+            This page handles email-password login, Google OAuth, GitHub OAuth, and links to signup and forgot password pages.
+          </p>
+          <h3>React concepts used here</h3>
+          <ul>
+            <li><strong><code>useState</code></strong> stores form input, loading state, and error state.</li>
+            <li><strong><code>useEffect</code></strong> shows info messages and OAuth errors.</li>
+            <li><strong><code>useNavigate</code></strong> redirects after successful login.</li>
+            <li><strong><code>useLocation</code></strong> reads messages passed from other pages.</li>
+            <li><strong><code>useSearchParams</code></strong> reads query params like OAuth errors.</li>
+            <li><strong><code>useAuth()</code></strong> provides the login function.</li>
+            <li><strong><code>useNotification()</code></strong> shows toasts.</li>
+          </ul>
+          <h3>Flow</h3>
+          <ol>
+            <li>User types email and password.</li>
+            <li>React stores values in state.</li>
+            <li>User clicks Login.</li>
+            <li>`handleSubmit()` calls `login(form)` from auth context.</li>
+            <li>JWT and user profile come from backend.</li>
+            <li>Frontend stores auth and navigates to home.</li>
+          </ol>
+        </section>
+
+        <section id="admin">
+          <h2>8) `AdminPanelPage.jsx` — admin dashboard</h2>
+          <p>
+            This is the most complex frontend page. It is a single dashboard that manages users, posts, categories, tags, comments, newsletters,
+            broadcasts, subscriptions, media, audit logs, and author requests.
+          </p>
+          <h3>Main state areas</h3>
+          <ul>
+            <li>data lists: users, posts, comments, categories, tags, media, subscriptions, logs</li>
+            <li>filters: search text, role, active status, comment status</li>
+            <li>forms: category form, tag name, newsletter content, broadcast content</li>
+            <li>modal state: author requests and selected request details</li>
+            <li>UI state: loading, error, busy actions</li>
+          </ul>
+          <h3>How it loads data</h3>
+          <p>
+            The page uses `Promise.all()` to load many backend datasets in parallel. This makes the admin panel fast and organized.
+          </p>
+          <h3>Main helpers</h3>
+          <ul>
+            <li><strong><code>load()</code></strong> → loads all dashboard data.</li>
+            <li><strong><code>loadAuthorRequests()</code></strong> → loads author approval requests.</li>
+            <li><strong><code>loadAuthorRequestDetails()</code></strong> → loads one request details.</li>
+            <li><strong><code>decideAuthorRequest()</code></strong> → approve or reject an author request.</li>
+            <li><strong><code>audit()</code></strong> → records admin actions.</li>
+            <li><strong><code>runAction()</code></strong> → reusable try/catch wrapper for actions.</li>
+          </ul>
+          <h3>What the admin can do</h3>
+          <ul>
+            <li>change user roles</li>
+            <li>suspend or reactivate users</li>
+            <li>delete users</li>
+            <li>feature/unfeature posts</li>
+            <li>publish/unpublish posts</li>
+            <li>create/update/delete categories and tags</li>
+            <li>approve/reject/delete comments</li>
+            <li>send newsletters and post notifications</li>
+            <li>send broadcast notifications</li>
+            <li>delete media</li>
+            <li>review subscription records</li>
+            <li>see audit logs</li>
+            <li>review author requests</li>
+          </ul>
+          <h3>Why this file is important</h3>
+          <p>
+            It shows how one frontend page can orchestrate many services and many business actions in a single dashboard.
+          </p>
+        </section>
+
+        <section id="summary">
+          <h2>9) Frontend file summary table</h2>
+          <div class="card">
+            <table style="width:100%; border-collapse: collapse; font-size: 0.95rem;">
+              <thead>
+                <tr>
+                  <th style="text-align:left; border-bottom:1px solid var(--border); padding:10px 8px;">File</th>
+                  <th style="text-align:left; border-bottom:1px solid var(--border); padding:10px 8px;">Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style="padding:8px; border-bottom:1px solid #edf2f7;"><code>App.jsx</code></td><td style="padding:8px; border-bottom:1px solid #edf2f7;">Main route controller and layout shell</td></tr>
+                <tr><td style="padding:8px; border-bottom:1px solid #edf2f7;"><code>AuthContext.jsx</code></td><td style="padding:8px; border-bottom:1px solid #edf2f7;">Global auth/session state</td></tr>
+                <tr><td style="padding:8px; border-bottom:1px solid #edf2f7;"><code>NotificationContext.jsx</code></td><td style="padding:8px; border-bottom:1px solid #edf2f7;">Toast notifications</td></tr>
+                <tr><td style="padding:8px; border-bottom:1px solid #edf2f7;"><code>api.js</code></td><td style="padding:8px; border-bottom:1px solid #edf2f7;">Common fetch wrapper</td></tr>
+                <tr><td style="padding:8px; border-bottom:1px solid #edf2f7;"><code>services.js</code></td><td style="padding:8px; border-bottom:1px solid #edf2f7;">Domain-wise API methods</td></tr>
+                <tr><td style="padding:8px; border-bottom:1px solid #edf2f7;"><code>LoginPage.jsx</code></td><td style="padding:8px; border-bottom:1px solid #edf2f7;">Login and OAuth screen</td></tr>
+                <tr><td style="padding:8px; border-bottom:1px solid #edf2f7;"><code>AuthorDashboardPage.jsx</code></td><td style="padding:8px; border-bottom:1px solid #edf2f7;">Author operations dashboard</td></tr>
+                <tr><td style="padding:8px; border-bottom:1px solid #edf2f7;"><code>AdminPanelPage.jsx</code></td><td style="padding:8px; border-bottom:1px solid #edf2f7;">Admin control center</td></tr>
+                <tr><td style="padding:8px; border-bottom:1px solid #edf2f7;"><code>ProtectedRoute.jsx</code></td><td style="padding:8px; border-bottom:1px solid #edf2f7;">Route guard</td></tr>
+                <tr><td style="padding:8px; border-bottom:1px solid #edf2f7;"><code>Navbar.jsx</code></td><td style="padding:8px; border-bottom:1px solid #edf2f7;">Navigation bar</td></tr>
+                <tr><td style="padding:8px; border-bottom:1px solid #edf2f7;"><code>Footer.jsx</code></td><td style="padding:8px; border-bottom:1px solid #edf2f7;">Footer layout</td></tr>
+                <tr><td style="padding:8px;"><code>RichTextEditor.jsx</code></td><td style="padding:8px;">Rich text editor for posts</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="script">
+          <h2>10) 2-minute frontend presentation script</h2>
+          <div class="card">
+            <p>
+              The Inkwell frontend is built in React and acts as the user-facing layer of the application. The root file <code>App.jsx</code>
+              controls routing, page transitions, and route protection. Authentication is managed globally in <code>AuthContext.jsx</code>, where token
+              and user data are stored and synced with localStorage. API calls are centralized in <code>api.js</code>, and domain-wise API methods are
+              grouped in <code>services.js</code>.
+            </p>
+            <p>
+              The login page uses controlled components, notifications, and OAuth redirects to authenticate the user. The author dashboard allows
+              post creation, media upload, and comment moderation, while the admin panel provides full platform control over users, posts,
+              categories, tags, comments, newsletters, subscriptions, media, audit logs, and author requests. Overall, the frontend is designed
+              with reusable components, shared state, protected routes, and a clean service layer so the UI stays organized, scalable, and easy to maintain.
+            </p>
+          </div>
+        </section>
+
+        <section id="study">
+          <h2>11) What to study first</h2>
+          <ol>
+            <li><code>App.jsx</code></li>
+            <li><code>AuthContext.jsx</code></li>
+            <li><code>api.js</code></li>
+            <li><code>services.js</code></li>
+            <li><code>LoginPage.jsx</code></li>
+            <li><code>AuthorDashboardPage.jsx</code></li>
+            <li><code>AdminPanelPage.jsx</code></li>
+            <li><code>ProtectedRoute.jsx</code></li>
+            <li><code>NotificationContext.jsx</code></li>
+            <li>the remaining page components</li>
+          </ol>
+          <div class="footer-note">
+            This HTML is intentionally print-friendly. Open it in a browser and use <strong>Print → Save as PDF</strong> to export a clean PDF version.
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

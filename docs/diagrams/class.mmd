@@ -1,0 +1,39 @@
+classDiagram
+    class AuthController
+    class SubscriptionController
+    class AuthServiceImpl
+    class SubscriptionService
+    class UserRepository
+    class User
+
+    class PostResource
+    class PostServiceImpl
+    class PostRepository
+    class Post
+
+    class CommentResource
+    class CommentServiceImpl
+    class CommentRepository
+    class Comment
+
+    class NotificationResource
+    class NotificationServiceImpl
+    class NotificationRepository
+    class Notification
+
+    AuthController --> AuthServiceImpl
+    SubscriptionController --> SubscriptionService
+    AuthServiceImpl --> UserRepository
+    UserRepository --> User
+
+    PostResource --> PostServiceImpl
+    PostServiceImpl --> PostRepository
+    PostRepository --> Post
+
+    CommentResource --> CommentServiceImpl
+    CommentServiceImpl --> CommentRepository
+    CommentRepository --> Comment
+
+    NotificationResource --> NotificationServiceImpl
+    NotificationServiceImpl --> NotificationRepository
+    NotificationRepository --> Notification

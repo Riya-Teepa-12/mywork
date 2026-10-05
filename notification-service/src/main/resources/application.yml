@@ -1,0 +1,79 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: notification-service
+  datasource:
+    url: ${NOTIFICATION_DB_URL:${INKWELL_DB_URL:jdbc:mysql://localhost:3306/inkwell_platform?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}}
+    username: ${NOTIFICATION_DB_USERNAME:${INKWELL_DB_USERNAME:root}}
+    password: ${NOTIFICATION_DB_PASSWORD:${INKWELL_DB_PASSWORD:admin}}
+    driver-class-name: ${NOTIFICATION_DB_DRIVER:${INKWELL_DB_DRIVER:com.mysql.cj.jdbc.Driver}}
+  jpa:
+    database-platform: ${NOTIFICATION_JPA_DIALECT:${INKWELL_JPA_DIALECT:org.hibernate.dialect.MySQLDialect}}
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: ${INKWELL_NOTIFICATION_KAFKA_GROUP_ID:notification-service-shadow}
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.app.notificationservice.messaging
+        spring.json.value.default.type: com.app.notificationservice.messaging.NotificationDispatchEvent
+        spring.json.use.type.headers: false
+    listener:
+      missing-topics-fatal: false
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:siyateepa9@gmail.com}
+    password: ${MAIL_PASSWORD:xdndfdsqjxjrhdnb}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
+
+logging:
+  config: "${INKWELL_LOG_CONFIG:file:D:/Inkwell/common-logback-spring.xml}"
+  file:
+    name: ${INKWELL_LOG_DIR:log}/notification-service.app.log
+  level:
+    com.app.notificationservice: INFO
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+
+inkwell:
+  notification:
+    unread-cache-prefix: ${INKWELL_NOTIFICATION_UNREAD_CACHE_PREFIX:notification:unread}
+    unread-cache-ttl-seconds: ${INKWELL_NOTIFICATION_UNREAD_CACHE_TTL_SECONDS:120}
+    kafka:
+      topic: ${INKWELL_NOTIFICATION_KAFKA_TOPIC:notification.dispatch.v1}
+      consumer:
+        apply-side-effects: ${INKWELL_NOTIFICATION_KAFKA_APPLY_SIDE_EFFECTS:true}
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

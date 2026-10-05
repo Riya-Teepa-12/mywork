@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false # Disable for tests
+      routes: [] # Empty routes for tests
+
+eureka:
+  client:
+    enabled: false
+
+logging:
+  config: classpath:logback-test.xml
+  level:
+    com.app.apigateway: INFO

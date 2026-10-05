@@ -1,0 +1,24 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: SERVICE-REGISTRY
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  #config: classpath:logback-test.xml
+  level:
+    com.app.serviceregistry: INFO
+  file:
+    name: /tmp/service-registry-test.log

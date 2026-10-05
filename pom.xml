@@ -1,0 +1,67 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.app</groupId>
+    <artifactId>inkwell-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>inkwell-parent</name>
+    <properties>
+        <sonar.projectKey>inkwell-project</sonar.projectKey>
+        <sonar.projectName>Inkwell Microservices</sonar.projectName>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/target/site/jacoco-aggregate/jacoco.xml,${maven.multiModuleProjectDirectory}/service-registry/target/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/api-gateway/target/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/Auth-service/target/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/post-service/target/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/comment-service/target/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/category-service/target/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/media-service/target/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/newsletter-service/target/site/jacoco/jacoco.xml,${maven.multiModuleProjectDirectory}/notification-service/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    </properties>
+
+    <modules>
+        <module>service-registry</module>
+        <module>api-gateway</module>
+        <module>Auth-service</module>
+        <module>post-service</module>
+        <module>comment-service</module>
+        <module>category-service</module>
+        <module>media-service</module>
+        <module>newsletter-service</module>
+        <module>notification-service</module>
+    </modules>
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+
+                    <execution>
+                        <id>report-aggregate</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report-aggregate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.10.0.2594</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

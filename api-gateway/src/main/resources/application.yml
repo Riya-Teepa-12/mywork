@@ -1,0 +1,149 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - ${GATEWAY_ALLOWED_ORIGIN:http://localhost:5173}
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowed-headers:
+              - "*"
+            exposed-headers:
+              - Authorization
+            allow-credentials: true
+      routes:
+        - id: auth-swagger
+          uri: lb://auth-service
+          predicates:
+           - Path=/auth/v3/api-docs, /auth/v3/api-docs/**
+          filters:
+           - RewritePath=/auth/v3/api-docs(?<segment>.*), /v3/api-docs${segment}
+        - id: post-swagger
+          uri: lb://post-service
+          predicates:
+            - Path=/posts/v3/api-docs, /posts/v3/api-docs/**
+          filters:
+           - RewritePath=/posts/v3/api-docs(?<segment>.*), /v3/api-docs${segment}
+        - id: comment-swagger
+          uri: lb://comment-service
+          predicates:
+            - Path=/comments/v3/api-docs, /comments/v3/api-docs/**
+          filters:
+            - RewritePath=/comments/v3/api-docs(?<segment>.*), /v3/api-docs${segment}
+        - id: category-swagger
+          uri: lb://category-service
+          predicates:
+            - Path=/categories/v3/api-docs, /categories/v3/api-docs/**
+          filters:
+            - RewritePath=/categories/v3/api-docs(?<segment>.*), /v3/api-docs${segment}
+        - id: media-swagger
+          uri: lb://media-service
+          predicates:
+            - Path=/media/v3/api-docs, /media/v3/api-docs/**
+          filters:
+            - RewritePath=/media/v3/api-docs(?<segment>.*), /v3/api-docs${segment}
+        - id: newsletter-swagger
+          uri: lb://newsletter-service
+          predicates:
+            - Path=/newsletter/v3/api-docs, /newsletter/v3/api-docs/**
+          filters:
+            - RewritePath=/newsletter/v3/api-docs(?<segment>.*), /v3/api-docs${segment}
+        - id: notification-swagger
+          uri: lb://notification-service
+          predicates:
+            - Path=/notifications/v3/api-docs, /notifications/v3/api-docs/**
+          filters:
+            - RewritePath=/notifications/v3/api-docs(?<segment>.*), /v3/api-docs${segment}
+        - id: auth-swagger
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/v3/api-docs, /auth/v3/api-docs/**
+          filters:
+            - RewritePath=/auth/v3/api-docs(?<segment>.*), /v3/api-docs${segment}
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+        - id: post-service
+          uri: lb://post-service
+          predicates:
+            - Path=/posts/**
+        - id: comment-service
+          uri: lb://comment-service
+          predicates:
+            - Path=/comments/**
+        - id: category-service
+          uri: lb://category-service
+          predicates:
+            - Path=/categories/**
+        - id: tag-service
+          uri: lb://category-service
+          predicates:
+            - Path=/tags/**
+        - id: media-service
+          uri: lb://media-service
+          predicates:
+            - Path=/media/**
+        - id: newsletter-service
+          uri: lb://newsletter-service
+          predicates:
+            - Path=/newsletter/**
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/notifications/**
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+    prefer-ip-address: false
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: Auth Service
+        url: /auth/v3/api-docs
+      - name: Post Service
+        url: /posts/v3/api-docs
+      - name: Comment Service
+        url: /comments/v3/api-docs
+      - name: Category Service
+        url: /categories/v3/api-docs
+      - name: Media Service
+        url: /media/v3/api-docs
+      - name: Newsletter Service
+        url: /newsletter/v3/api-docs
+      - name: Notification Service
+        url: /notifications/v3/api-docs
+
+logging:
+  config: "${INKWELL_LOG_CONFIG:file:D:/Inkwell/common-logback-spring.xml}"
+  file:
+    name: ${INKWELL_LOG_DIR:log}/api-gateway.app.log
+  level:
+    com.app.apigateway: INFO
+
+security:
+  jwt:
+    secret: mysecretkeymysecretkeymysecretkeymysecretkey
+    expiration-ms: 864000
